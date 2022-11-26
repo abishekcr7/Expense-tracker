@@ -51,12 +51,19 @@ function showNewUserOnScreen(exp){
     const expenses=document.getElementById("expenses");
     const childHTML = `<li id=${exp.description}> ${exp.amount} - ${exp.description} - ${exp.category}
                             <button onclick=deleteexpense('${exp.description}')> delete expense </button>
-                            <button onclick=editexpense('${exp.description}')> edit expense </button>
+                            <button onclick=editexpense('${exp.amount}','${exp.description}')> edit expense </button>
                          </li>`
 
     expenses.innerHTML = expenses.innerHTML + childHTML;
 }
+function editexpense(amount, description){
 
+    document.getElementById('amount').value = amount;
+    document.getElementById('description').value = description;
+    //document.getElementById('category').value =category;
+
+    deleteexpense(description)
+ }
 function deleteexpense(description){
     console.log(description)
     localStorage.removeItem(description);
