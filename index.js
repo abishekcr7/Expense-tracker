@@ -15,8 +15,16 @@ function storevalues(e){
         'description':description,
         'category':category
     }
-    localStorage.setItem(expdetails.description,JSON.stringify(expdetails))
-    showNewUserOnScreen(expdetails)
+    axios.post("https://crudcrud.com/api/f52f9e6292464ad1a479e45f64b651ce/expensedetails",expdetails)
+         .then((response) =>{
+            showNewUserOnScreen(response.data)
+            console.log(response)
+         })
+         .catch((err)=>{
+            console.log(err)
+         })
+    //localStorage.setItem(expdetails.description,JSON.stringify(expdetails))
+    //showNewUserOnScreen(expdetails)
     
     // var expenseinfo=JSON.parse(localStorage.getItem(description))
 
@@ -37,43 +45,64 @@ function storevalues(e){
     // expenses.appendChild(li)
 }
 window.addEventListener("DOMContentLoaded", () => {
-    const localStorageObj = localStorage;
-    const localstoragekeys  = Object.keys(localStorageObj)
+    axios.get("https://crudcrud.com/api/f52f9e6292464ad1a479e45f64b651ce/expensedetails")
+         .then((response) =>{
+            console.log(response)
 
-    for(var i =0; i< localstoragekeys.length; i++){
-        const key = localstoragekeys[i]
-        const userDetailsString = localStorageObj[key];
-        const userDetailsObj = JSON.parse(userDetailsString);
-        showNewUserOnScreen(userDetailsObj)
-    }
+            for( var i=0; i<response.data.length;i++){
+                showNewUserOnScreen(response.data[i])
+            }
+         })
+         .catch((err)=>{
+            console.log(err)
+         })
+    // const localStorageObj = localStorage;
+    // const localstoragekeys  = Object.keys(localStorageObj)
+
+    // for(var i =0; i< localstoragekeys.length; i++){
+    //     const key = localstoragekeys[i]
+    //     const userDetailsString = localStorageObj[key];
+    //     const userDetailsObj = JSON.parse(userDetailsString);
+    //     showNewUserOnScreen(userDetailsObj)
+    // }
 })
+
+
 function showNewUserOnScreen(exp){
     const expenses=document.getElementById("expenses");
-    const childHTML = `<li id=${exp.description}> ${exp.amount} - ${exp.description} - ${exp.category}
-                            <button onclick=deleteexpense('${exp.description}')> delete expense </button>
-                            <button onclick=editexpense('${exp.amount}','${exp.description}')> edit expense </button>
+    const childHTML = `<li id=${exp._id}> ${exp.amount} - ${exp.description} - ${exp.category}
+                            <button onclick=deleteexpense('${exp._id}')> delete expense </button>
+                            <button onclick=editexpense('${exp.amount}','${exp.description}','${exp._id}')> edit expense </button>
                          </li>`
 
     expenses.innerHTML = expenses.innerHTML + childHTML;
 }
-function editexpense(amount, description){
+function editexpense(amount,description,expId){
 
     document.getElementById('amount').value = amount;
     document.getElementById('description').value = description;
     //document.getElementById('category').value =category;
 
-    deleteexpense(description)
+    deleteexpense(expId)
  }
-function deleteexpense(description){
-    console.log(description)
-    localStorage.removeItem(description);
-    removeUserFromScreen(description);
+function deleteexpense(expId){
+    console.log(expId)
+    //localStorage.removeItem(description);
+    axios.delete(`https://crudcrud.com/api/f52f9e6292464ad1a479e45f64b651ce/expensedetails/${expId}`)
+         .then((response)=>{
+            console.log(response)
+            removeUserFromScreen(expId);
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+    
 
 }
 
-function removeUserFromScreen(description){
+function removeUserFromScreen(expId){
     const parentNode = document.getElementById('expenses');
-    const childNodeToBeDeleted = document.getElementById(description);
+    const childNodeToBeDeleted = document.getElementById(expId);
 
     parentNode.removeChild(childNodeToBeDeleted)
 }
