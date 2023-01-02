@@ -15,7 +15,7 @@ function storevalues(e){
         'description':description,
         'category':category
     }
-    axios.post("https://crudcrud.com/api/f52f9e6292464ad1a479e45f64b651ce/expensedetails",expdetails)
+    axios.post("https://crudcrud.com/api/659b51339f5240d7934108d780beda54gi/expensedetails",expdetails)
          .then((response) =>{
             showNewUserOnScreen(response.data)
             console.log(response)
@@ -45,7 +45,7 @@ function storevalues(e){
     // expenses.appendChild(li)
 }
 window.addEventListener("DOMContentLoaded", () => {
-    axios.get("https://crudcrud.com/api/f52f9e6292464ad1a479e45f64b651ce/expensedetails")
+    axios.get("https://crudcrud.com/api/659b51339f5240d7934108d780beda54/expensedetails")
          .then((response) =>{
             console.log(response)
 
@@ -88,7 +88,7 @@ function editexpense(amount,description,expId){
 function deleteexpense(expId){
     console.log(expId)
     //localStorage.removeItem(description);
-    axios.delete(`https://crudcrud.com/api/f52f9e6292464ad1a479e45f64b651ce/expensedetails/${expId}`)
+    axios.delete(`https://crudcrud.com/api/659b51339f5240d7934108d780beda54/expensedetails/${expId}`)
          .then((response)=>{
             console.log(response)
             removeUserFromScreen(expId);
